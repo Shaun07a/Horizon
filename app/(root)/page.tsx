@@ -32,7 +32,7 @@ const Home = () => {
       <RightSidebar 
         user={loggedIN}
         transactions={[]}
-        banks={[]}
+        banks={[{}, {}]}
       />
     </section>
   )
