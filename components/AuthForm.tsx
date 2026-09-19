@@ -9,28 +9,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import { Form } from "@/components/ui/form"
 import { authFormSchema } from '@/lib/utils'
 import CustomInput from './CustomInput'
-
-// 1. Added password to the Zod schema
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8, { message: "Password must be at least 8 characters." }),
-})
 
 const AuthForm = ({ type }: { type: string }) => {
   const [user, setUser] = useState(null)
 
-  // 2. Added password to the default values
   const form = useForm<z.infer<typeof authFormSchema>>({
     resolver: zodResolver(authFormSchema),
     defaultValues: {
@@ -80,11 +65,11 @@ const AuthForm = ({ type }: { type: string }) => {
         </div>
       ) : (
         <>
-          {/* 3. ONLY ONE <Form> and <form> wrapper used for all fields */}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               
-              <CustomInput control={form.control} name='username' label='Username' placeholder='Enter your username' />
+              {/* Changed 'username' to 'email' to match the schema */}
+              <CustomInput control={form.control} name='email' label='Email' placeholder='Enter your email' />
               <CustomInput control={form.control} name='password' label='Password' placeholder='Enter your password' />
 
               <Button type="submit" className="form-btn w-full">
