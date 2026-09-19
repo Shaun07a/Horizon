@@ -12,32 +12,34 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Divide } from 'lucide-react'
+import { authFormSchema } from '@/lib/utils'
+import CustomInput from './CustomInput'
 
-// 1. Updated Schema to match the image exactly
+// 1. Added password to the Zod schema
 const formSchema = z.object({
-  email: z.string().email()
+  email: z.string().email(),
+  password: z.string().min(8, { message: "Password must be at least 8 characters." }),
 })
 
 const AuthForm = ({ type }: { type: string }) => {
   const [user, setUser] = useState(null)
 
-  // 2. Updated useForm to expect the username schema
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  // 2. Added password to the default values
+  const form = useForm<z.infer<typeof authFormSchema>>({
+    resolver: zodResolver(authFormSchema),
     defaultValues: {
       email: "",
+      password: "",
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  function onSubmit(data: z.infer<typeof authFormSchema>) {
     console.log(data)
   }
 
@@ -55,7 +57,6 @@ const AuthForm = ({ type }: { type: string }) => {
         </Link>
 
         <div className='flex flex-col gap-1 md:gap-3'>
-          {/* 3. Fixed HTML nesting: Separated the h1 and p tags */}
           <h1 className='text-24 lg:text-36 font-semibold text-gray-900'>
             {user
               ? 'Link Account'
@@ -79,34 +80,16 @@ const AuthForm = ({ type }: { type: string }) => {
         </div>
       ) : (
         <>
+          {/* 3. ONLY ONE <Form> and <form> wrapper used for all fields */}
           <Form {...form}>
-            {/* Added space-y-8 to give the form items some breathing room */}
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               
-              {/* 4. Built the form structure matching the picture */}
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem className='form-item'>
-                    <FormLabel className='form-label'>
-                      Email
-                    </FormLabel>
-                    <div className='flex w-full flex-col'>
-                        <FormControl>
-                          <Input 
-                          placeholder='Enter your email'
-                          className='input-class'
-                          {...field}
-                          />
-                        </FormControl>
-                        <FormMessage className='form-message mt-2' />
-                    </div>
-                  </FormItem>
-                )}
-              />
-              
-              <Button type="submit">Submit</Button>
+              <CustomInput control={form.control} name='username' label='Username' placeholder='Enter your username' />
+              <CustomInput control={form.control} name='password' label='Password' placeholder='Enter your password' />
+
+              <Button type="submit" className="form-btn w-full">
+                {type === 'sign-in' ? 'Sign In' : 'Sign Up'}
+              </Button>
             </form>
           </Form>
         </>
