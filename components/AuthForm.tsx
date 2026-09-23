@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { authFormSchema } from '@/lib/utils'
 import CustomInput from './CustomInput'
+import { Loader2 } from 'lucide-react'
 
 const AuthForm = ({ type }: { type: string }) => {
   const [user, setUser] = useState(null);
@@ -77,7 +78,15 @@ const AuthForm = ({ type }: { type: string }) => {
               <CustomInput control={form.control} name='password' label='Password' placeholder='Enter your password' />
 
               <Button type="submit" className="form-btn">
-                Submit
+                {isLoading ? (
+                  <>
+                    <Loader2 size={20}
+                    className='animate-spin'/> &nbsp
+                    Loading ...
+                  </>
+                ): 
+                type === 'sign-in'
+                ? 'Sign in' : 'Sign up'}
               </Button>
             </form>
           </Form>
