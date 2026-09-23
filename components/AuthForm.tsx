@@ -81,8 +81,8 @@ const AuthForm = ({ type }: { type: string }) => {
                 {isLoading ? (
                   <>
                     <Loader2 size={20}
-                    className='animate-spin'/> &nbsp
-                    Loading ...
+                    className='animate-spin'/> &nbsp;
+                    Loading...
                   </>
                 ): 
                 type === 'sign-in'
