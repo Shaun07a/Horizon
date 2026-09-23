@@ -14,7 +14,9 @@ import { authFormSchema } from '@/lib/utils'
 import CustomInput from './CustomInput'
 
 const AuthForm = ({ type }: { type: string }) => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const form = useForm<z.infer<typeof authFormSchema>>({
     resolver: zodResolver(authFormSchema),
@@ -24,8 +26,8 @@ const AuthForm = ({ type }: { type: string }) => {
     },
   })
 
-  function onSubmit(data: z.infer<typeof authFormSchema>) {
-    console.log(data)
+  function onSubmit(values: z.infer<typeof authFormSchema>) {
+    console.log(values)
   }
 
   return (
