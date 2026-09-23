@@ -72,8 +72,8 @@ const AuthForm = ({ type }: { type: string }) => {
               <CustomInput control={form.control} name='email' label='Email' placeholder='Enter your email' />
               <CustomInput control={form.control} name='password' label='Password' placeholder='Enter your password' />
 
-              <Button type="submit" className="form-btn w-full">
-                {type === 'sign-in' ? 'Sign In' : 'Sign Up'}
+              <Button type="submit" className="form-btn">
+                Submit
               </Button>
             </form>
           </Form>
