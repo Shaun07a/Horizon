@@ -27,7 +27,9 @@ const AuthForm = ({ type }: { type: string }) => {
   })
 
   function onSubmit(values: z.infer<typeof authFormSchema>) {
+    setIsLoading(true)
     console.log(values)
+    setIsLoading(false);
   }
 
   return (
