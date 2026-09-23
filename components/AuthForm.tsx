@@ -77,7 +77,8 @@ const AuthForm = ({ type }: { type: string }) => {
               <CustomInput control={form.control} name='email' label='Email' placeholder='Enter your email' />
               <CustomInput control={form.control} name='password' label='Password' placeholder='Enter your password' />
 
-              <Button type="submit" className="form-btn">
+              <Button type="submit"  disabled = {isLoading}
+              className="form-btn">
                 {isLoading ? (
                   <>
                     <Loader2 size={20}
