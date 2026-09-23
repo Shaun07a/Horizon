@@ -86,7 +86,7 @@ const AuthForm = ({ type }: { type: string }) => {
                   </>
                 ): 
                 type === 'sign-in'
-                ? 'Sign in' : 'Sign up'}
+                ? 'Sign In' : 'Sign Up'}
               </Button>
             </form>
           </Form>
