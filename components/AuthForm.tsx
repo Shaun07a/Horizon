@@ -91,6 +91,15 @@ const AuthForm = ({ type }: { type: string }) => {
               </Button>
             </form>
           </Form>
+          <footer className='flex justify-center gap-1'>
+              <p>
+                {type === 'sign-in'
+                ? "Don't have an account?"
+                : "Already have an account?"
+                }</p>
+                <Link>
+                </Link>
+          </footer>
         </>
       )}
     </section>
