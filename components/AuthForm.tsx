@@ -72,6 +72,11 @@ const AuthForm = ({ type }: { type: string }) => {
         <>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              {type === 'sign-up' && (
+                <>
+                  <CustomInput />
+                </>
+              )}
               
               {/* Changed 'username' to 'email' to match the schema */}
               <CustomInput control={form.control} name='email' label='Email' placeholder='Enter your email' />
