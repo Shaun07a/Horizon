@@ -2,6 +2,8 @@
 
 import { ID } from "node-appwrite";
 import { createAdminClient, createSessionClient } from "../appwrite";
+import { cookies } from "next/headers";
+import { parseStringify } from "../utils";
 
 export const signIn = async () => {
     try {
@@ -32,12 +34,14 @@ export const signUp = async (userData: SignUpParams) => {
             password
         });
 
-        cookies().set("my-custom-session", session.secret, {
-            path: "/",
-            httpOnly: true,
-            sameSite: "strict",
-            secure: true,
+        (await cookies()).set("appwrite-session", session.secret, {
+        path: "/",
+        httpOnly: true,
+        sameSite: "strict",
+        secure: true,
         });
+
+        return parseStringify(newUserAccount);
     } catch(error){
         console.error('Error', error);
     }
