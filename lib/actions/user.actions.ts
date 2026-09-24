@@ -7,20 +7,19 @@ import { parseStringify } from "../utils";
 
 export const signIn = async () => {
     try {
-        //Mutation / Database / Make fecth
+        //Mutation / Database / Make fetch
     } catch(error){
         console.error('Error', error);
     }
 }
 
 export const signUp = async (userData: SignUpParams) => {
-    const {email, password, firstName, lastName} = userData;
+    const { email, password, firstName, lastName } = userData;
 
     try {
         const { account } = await createAdminClient();
 
-        // Removed the {} and passed as separate positional arguments.
-        // Used backticks (`) for proper string interpolation.
+        // 1. Create the user account using separate positional arguments
         const newUserAccount = await account.create(
             ID.unique(), 
             email, 
@@ -28,19 +27,18 @@ export const signUp = async (userData: SignUpParams) => {
             `${firstName} ${lastName}`
         );
         
-        // ... rest of your code
-        const session = await account.createEmailPasswordSession({
-            email,
-            password
-        });
+        // 2. Create the session using separate arguments (not an object)
+        const session = await account.createEmailPasswordSession(email, password);
 
+        // 3. Await the cookies() function before calling .set()
         (await cookies()).set("appwrite-session", session.secret, {
-        path: "/",
-        httpOnly: true,
-        sameSite: "strict",
-        secure: true,
+            path: "/",
+            httpOnly: true,
+            sameSite: "strict",
+            secure: true,
         });
 
+        // 4. Stringify and return the user object so the frontend state can update
         return parseStringify(newUserAccount);
     } catch(error){
         console.error('Error', error);
@@ -50,7 +48,9 @@ export const signUp = async (userData: SignUpParams) => {
 export async function getLoggedInUser() {
   try {
     const { account } = await createSessionClient();
-    return await account.get();
+    const user =  await account.get();
+
+    return parseStringify(user);
   } catch (error) {
     return null;
   }
