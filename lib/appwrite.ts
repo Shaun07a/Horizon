@@ -9,7 +9,7 @@ export async function createSessionClient() {
 
   // Await the cookies() function first, then call .get()
   const cookieStore = await cookies();
-  const session = cookieStore.get("my-custom-session");
+  const session = cookieStore.get("appwrite-session");
 
   if (!session || !session.value) {
     throw new Error("No session");
