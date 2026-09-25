@@ -9,7 +9,16 @@ export const signIn = async ({ email, password }: signInProps) => {
     try {
         const { account } = await createAdminClient();
 
-        const response = await account.createEmailPasswordSession(email, password)
+        // 1. Create the session
+        const response = await account.createEmailPasswordSession(email, password);
+
+        // 2. Set the cookie so Next.js remembers the session
+        (await cookies()).set("appwrite-session", response.secret, {
+            path: "/",
+            httpOnly: true,
+            sameSite: "strict",
+            secure: true,
+        });
 
         return parseStringify(response);
     } catch(error){
@@ -52,7 +61,7 @@ export const signUp = async (userData: SignUpParams) => {
 export async function getLoggedInUser() {
   try {
     const { account } = await createSessionClient();
-    const user =  await account.get();
+    const user = await account.get();
 
     return parseStringify(user);
   } catch (error) {

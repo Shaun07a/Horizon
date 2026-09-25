@@ -1,10 +1,16 @@
 import HeaderBox from '@/components/HeaderBox'
 import RightSidebar from '@/components/RightSidebar';
 import TotalBalanceBox from '@/components/TotalBalanceBox';
+import { getLoggedInUser } from '@/lib/actions/user.actions';
+import { redirect } from 'next/navigation'; // 1. Import redirect
 
+const Home = async () => {
+  const loggedIN = await getLoggedInUser();
 
-const Home = () => {
-  const loggedIN = { firstName: 'Shaun', lastName: 'Joseph', email: 'shaunjoseph004@gmail.com'};
+  // 2. Add this protection check before rendering anything
+  if (!loggedIN) {
+    redirect('/sign-in');
+  }
 
   return (
     <section className="home">
@@ -13,7 +19,7 @@ const Home = () => {
           <HeaderBox 
             type="greeting"
             title="Welcome"
-            user={loggedIN?.firstName || 'Guest'}
+            user={loggedIN.name || 'Guest'}
             subtext="Access and manage your account and transactions efficiently."
           />
 
@@ -22,12 +28,10 @@ const Home = () => {
             totalBanks={1}
             totalCurrentBalance={1250.35}
           />
-
         </header>
 
         RECENT TRANSACTIONS
       </div>
-
 
       <RightSidebar 
         user={loggedIN}
