@@ -68,3 +68,20 @@ export async function getLoggedInUser() {
     return null;
   }
 }
+
+export const logoutAccount = async () => {
+    try {
+        const { account } = await createSessionClient();
+
+        // 1. Invalidate the session on Appwrite's server
+        await account.deleteSession('current');
+
+        // 2. Await the cookies() function before calling .delete()
+        (await cookies()).delete('appwrite-session');
+        
+        return true;
+    } catch (error) {
+        console.error('Error logging out:', error);
+        return null;
+    }
+}
