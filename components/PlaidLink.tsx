@@ -1,3 +1,4 @@
+import { createLinkToken } from '@/lib/actions/user.actions';
 import { Button } from '@base-ui/react'
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'
@@ -11,8 +12,8 @@ const PlaidLink = ({ user, variant}: PlaidLinkProps) => {
 
   useEffect(() => {
     const getLinkToken = async () =>{
-        // const data = await createLinkToken(user);
-        // setToken(data?.linkToken);
+        const data = await createLinkToken(user);
+        setToken(data?.linkToken);
     }
     getLinkToken();
   }, [user]);
