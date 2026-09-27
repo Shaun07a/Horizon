@@ -3,7 +3,7 @@
 import { ID } from "node-appwrite";
 import { createAdminClient, createSessionClient } from "../appwrite";
 import { cookies } from "next/headers";
-import { encryptId, parseStringify } from "../utils";
+import { encryptId, extractCustomerIdFromUrl, parseStringify } from "../utils";
 import { CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products } from "plaid";
 import { plaidClient } from "../plaid";
 import { revalidatePath } from "next/cache";
@@ -60,6 +60,8 @@ export const signUp = async (userData: SignUpParams) => {
         })
 
         if(!dwollaCustomerUrl) throw new Error('Error creating Dwolla customer')
+
+        const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl)
         
         // 2. Create the session using separate arguments (not an object)
         const session = await account.createEmailPasswordSession(email, password);
