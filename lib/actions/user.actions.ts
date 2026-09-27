@@ -7,7 +7,7 @@ import { encryptId, parseStringify } from "../utils";
 import { CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products } from "plaid";
 import { plaidClient } from "../plaid";
 import { revalidatePath } from "next/cache";
-import { addFundingSource } from "./dwolla.actions";
+import { addFundingSource, createDwollaCustomer } from "./dwolla.actions";
 
 const {
     APPWRITE_DATABASE_ID: DATABASE_ID,
@@ -53,6 +53,13 @@ export const signUp = async (userData: SignUpParams) => {
         );
 
         if(!newUserAccount) throw new Error('Error creating user')
+
+        const dwollaCustomerUrl = await createDwollaCustomer({
+            ...userData,
+            type: 'personal'
+        })
+
+        if(!dwollaCustomerUrl) throw new Error('Error creating Dwolla customer')
         
         // 2. Create the session using separate arguments (not an object)
         const session = await account.createEmailPasswordSession(email, password);
