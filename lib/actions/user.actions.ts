@@ -42,7 +42,7 @@ export const signUp = async (userData: SignUpParams) => {
     let newUserAccount;
 
     try {
-        const { account } = await createAdminClient();
+        const { account, database } = await createAdminClient();
 
         // 1. Create the user account using separate positional arguments
         newUserAccount = await account.create(
@@ -61,7 +61,19 @@ export const signUp = async (userData: SignUpParams) => {
 
         if(!dwollaCustomerUrl) throw new Error('Error creating Dwolla customer')
 
-        const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl)
+        const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl);
+
+        const newUser = await database.createDocument(
+            DATABASE_ID!,
+            USER_COLLECTION_ID!,
+            ID.unique(),
+            {
+                ...userData,
+                userId: newUserAccount,
+                dwollaCustomerId,
+                dwollaCustomerUrl
+            }
+        )
         
         // 2. Create the session using separate arguments (not an object)
         const session = await account.createEmailPasswordSession(email, password);
@@ -75,7 +87,7 @@ export const signUp = async (userData: SignUpParams) => {
         });
 
         // 4. Stringify and return the user object so the frontend state can update
-        return parseStringify(newUserAccount);
+        return parseStringify(newUser);
     } catch(error){
         console.error('Error', error);
     }
