@@ -1,4 +1,4 @@
-import { createLinkToken } from '@/lib/actions/user.actions';
+import { createLinkToken, exchangePublicToken } from '@/lib/actions/user.actions';
 import { Button } from '@base-ui/react'
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'
@@ -19,14 +19,18 @@ const PlaidLink = ({ user, variant}: PlaidLinkProps) => {
   }, [user]);
 
   // FIX 2: Removed `: string` to let TypeScript infer the correct type automatically, and added metadata
-  const onSuccess = useCallback<PlaidLinkOnSuccess>(async (public_token, metadata) =>{
-    // await exchangePublicToken({
-    //     publicToken: public_token,
-    //     user,
-    // })
+    const onSuccess = useCallback<PlaidLinkOnSuccess>(async (public_token, metadata) =>{
+    
+        // Add a check to ensure public_token is a valid string before making the API call
+        if (public_token) {
+            await exchangePublicToken({
+                publicToken: public_token,
+                user,
+            })
+        }
 
-    router.push('/');
-  }, [user, router])
+        router.push('/');
+    }, [user, router])
 
   const config: PlaidLinkOptions = {
     token,
