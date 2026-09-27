@@ -45,12 +45,14 @@ export const signUp = async (userData: SignUpParams) => {
         const { account } = await createAdminClient();
 
         // 1. Create the user account using separate positional arguments
-        const newUserAccount = await account.create(
+        newUserAccount = await account.create(
             ID.unique(), 
             email, 
             password, 
             `${firstName} ${lastName}`
         );
+
+        if(!newUserAccount) throw new Error('Error creating user')
         
         // 2. Create the session using separate arguments (not an object)
         const session = await account.createEmailPasswordSession(email, password);
