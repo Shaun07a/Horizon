@@ -18,11 +18,6 @@ const Home = async ({ searchParams: { id, page }}: SearchParamProps) => {
 
   const account = await getAccount({ appwriteItemId })
 
-  console.log({
-    accountsData,
-    account
-  })
-
   // 2. Add this protection check before rendering anything
   if (!loggedIN) {
     redirect('/sign-in');
