@@ -19,13 +19,11 @@ const RecentTransactions = ({
             </Link>
         </header>
 
-        <Tabs defaultValue="account" className="w-[400px]">
-            <TabsList>
-                <TabsTrigger value="account">Account</TabsTrigger>
-                <TabsTrigger value="password">Password</TabsTrigger>
+        <Tabs defaultValue={appwriteItemId} className="w-full">
+            <TabsList className='recent-transactions-tablist'>
+                
             </TabsList>
-            <TabsContent value="account">Make changes to your account here.</TabsContent>
-            <TabsContent value="password">Change your password here.</TabsContent>
+            
         </Tabs>
     </section>
   )
