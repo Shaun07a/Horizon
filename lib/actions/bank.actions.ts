@@ -22,6 +22,11 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
     // get banks from db
     const banks = await getBanks({ userId });
 
+    // Guard clause: If no banks are returned, return early to prevent mapping errors
+    if (!banks || banks.length === 0) {
+        return parseStringify({ data: [], totalBanks: 0, totalCurrentBalance: 0 });
+    }
+
     const accounts = await Promise.all(
       banks?.map(async (bank: Bank) => {
         // get each account info from plaid
@@ -69,6 +74,11 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
   try {
     // get bank from db
     const bank = await getBank({ documentId: appwriteItemId });
+
+    // Guard clause: Prevent the app from crashing if the bank document is missing
+    if (!bank) {
+        throw new Error("Bank not found in Appwrite database");
+    }
 
     // get account info from plaid
     const accountsResponse = await plaidClient.accountsGet({

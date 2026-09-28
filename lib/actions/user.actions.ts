@@ -115,7 +115,9 @@ export const signUp = async ({ password, ...userData}: SignUpParams) => {
 export async function getLoggedInUser() {
   try {
     const { account } = await createSessionClient();
-    const user = await account.get();
+    const result = await account.get();
+
+    const user = await getUserInfo({ userId: result.$id})
 
     return parseStringify(user);
   } catch (error) {
@@ -147,7 +149,8 @@ export const createLinkToken = async (user : User) => {
                 client_user_id: user.$id
             },
             client_name: `${user.firstName} ${user.lastName}`,
-            products: ['auth'] as Products[],
+            // FIX: Add 'transactions' to this array
+            products: ['auth', 'transactions'] as Products[], 
             language: 'en',
             country_codes: ['US'] as CountryCode[],
         }
@@ -181,13 +184,14 @@ export const createBankAccount = async ({
            accountId,
            accessToken,
            fundingSourceUrl,
-           sharableId,  
+           shareableId: sharableId,  
         }
        )
 
        return parseStringify(bankAccount);
     } catch (error) {
-        
+        // EXPOSED THE ERROR HERE
+        console.error("Failed to create bank account document:", error);
     }
 }
 
@@ -273,14 +277,15 @@ export const getBank = async ({ documentId }: getBankProps) => {
     try {
         const { database } = await  createAdminClient();
 
-        const bank = await database.listDocuments(
+        // Optimized to use getDocument instead of listDocuments
+        const bank = await database.getDocument(
             DATABASE_ID!,
             BANK_COLLECTION_ID!,
-            [Query.equal('$id', [documentId])]
+            documentId
         )
 
-        return parseStringify(bank.documents[0]);
+        return parseStringify(bank);
     } catch (error) {
-        console.log(error)
+        console.log("Error fetching bank:", error)
     }
 }
