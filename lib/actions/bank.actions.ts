@@ -12,7 +12,8 @@ import {
 import { plaidClient } from "../plaid";
 import { parseStringify } from "../utils";
 
-import { getTransactionsByBankId } from "./transaction.actions";
+// 1. Commented out the transaction actions import
+// import { getTransactionsByBankId } from "./transaction.actions";
 import { getBanks, getBank } from "./user.actions";
 
 // Get multiple bank accounts
@@ -45,7 +46,7 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
           type: accountData.type as string,
           subtype: accountData.subtype! as string,
           appwriteItemId: bank.$id,
-          sharaebleId: bank.shareableId,
+          sharableId: bank.sharableId, 
         };
 
         return account;
@@ -75,7 +76,8 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
     });
     const accountData = accountsResponse.data.accounts[0];
 
-    // get transfer transactions from appwrite
+    // 2. Commented out the internal Appwrite transfer database logic
+    /*
     const transferTransactionsData = await getTransactionsByBankId({
       bankId: bank.$id,
     });
@@ -91,6 +93,7 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
         type: transferData.senderBankId === bank.$id ? "debit" : "credit",
       })
     );
+    */
 
     // get institution info from plaid
     const institution = await getInstitution({
@@ -114,8 +117,8 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
       appwriteItemId: bank.$id,
     };
 
-    // sort transactions by date such that the most recent transaction is first
-      const allTransactions = [...transactions, ...transferTransactions].sort(
+    // 3. Removed `...transferTransactions` from the merged array since it is commented out above
+    const allTransactions = [...transactions].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
@@ -138,11 +141,11 @@ export const getInstitution = async ({
       country_codes: ["US"] as CountryCode[],
     });
 
-    const intitution = institutionResponse.data.institution;
+    const institution = institutionResponse.data.institution;
 
-    return parseStringify(intitution);
+    return parseStringify(institution);
   } catch (error) {
-    console.error("An error occurred while getting the accounts:", error);
+    console.error("An error occurred while getting the institution:", error);
   }
 };
 
@@ -180,6 +183,6 @@ export const getTransactions = async ({
 
     return parseStringify(transactions);
   } catch (error) {
-    console.error("An error occurred while getting the accounts:", error);
+    console.error("An error occurred while getting the transactions:", error);
   }
 };
