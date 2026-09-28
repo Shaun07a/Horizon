@@ -18,6 +18,17 @@ const {
 export const signIn = async ({ email, password }: signInProps) => {
     try {
         const { account } = await createAdminClient();
+        
+        // 2. Create the session using separate arguments (not an object)
+        const session = await account.createEmailPasswordSession(email, password);
+
+        // 3. Await the cookies() function before calling .set()
+        (await cookies()).set("appwrite-session", session.secret, {
+            path: "/",
+            httpOnly: true,
+            sameSite: "strict",
+            secure: true,
+        });
 
         // 1. Create the session
         const response = await account.createEmailPasswordSession(email, password);
