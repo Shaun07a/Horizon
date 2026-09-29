@@ -1,13 +1,15 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-
 import { cn, formUrlQuery } from "@/lib/utils";
 
 export const BankTabItem = ({ account, appwriteItemId }: BankTabItemProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const isActive = appwriteItemId === account?.appwriteItemId;
+  
+  // Upgrade: Check the URL directly for the active ID to prevent UI lag
+  const currentUrlId = searchParams.get("id") || appwriteItemId;
+  const isActive = currentUrlId === account?.appwriteItemId;
 
   const handleBankChange = () => {
     const newUrl = formUrlQuery({

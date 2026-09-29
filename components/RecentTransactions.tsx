@@ -11,9 +11,10 @@ const RecentTransactions = ({
     appwriteItemId,
     page = 1,
 }: RecentTransactionsProps) => {
+  
   return (
     <section className='recent-transactions'>
-        <header className='flex item-center justify-between'>
+        <header className='flex items-center justify-between'>
             <h2 className='recent-transactions-label'>
                 Recent transactions
             </h2>
@@ -22,14 +23,15 @@ const RecentTransactions = ({
             </Link>
         </header>
 
+        {/* Reverted to defaultValue, removed onValueChange */}
         <Tabs defaultValue={appwriteItemId} className="w-full">
             <TabsList className='recent-transactions-tablist'>
                 {accounts.map((account: Account) =>(
                     <TabsTrigger key={account.id} value={account.appwriteItemId}>
                         <BankTabItem 
-                        key={account.id}
-                        account={account}
-                        appwriteItemId={appwriteItemId}
+                            key={account.id}
+                            account={account}
+                            appwriteItemId={appwriteItemId}
                         />
                     </TabsTrigger>
                 ))}
@@ -37,14 +39,14 @@ const RecentTransactions = ({
 
             {accounts.map((account: Account) => (
                 <TabsContent
-                value={account.appwriteItemId}
-                key={account.id}
-                className='space-y-4'
+                    value={account.appwriteItemId}
+                    key={account.id}
+                    className='space-y-4'
                 >
                   <BankInfo 
-                  account={account}
-                  appwriteItemId={appwriteItemId}
-                  type='full'
+                    account={account}
+                    appwriteItemId={appwriteItemId}
+                    type='full'
                   />
 
                   <TransactionsTable transactions={transactions}/>

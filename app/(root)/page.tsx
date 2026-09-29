@@ -4,11 +4,17 @@ import RightSidebar from '@/components/RightSidebar';
 import TotalBalanceBox from '@/components/TotalBalanceBox';
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
-import { redirect } from 'next/navigation'; // 1. Import redirect
+import { redirect } from 'next/navigation'; 
 
 const Home = async ({ searchParams: { id, page }}: SearchParamProps) => {
   const currentPage = Number(page as string) || 1;
   const loggedIN = await getLoggedInUser();
+
+  // FIX 1: Move redirect BEFORE trying to access loggedIN.$id to prevent server crashes
+  if (!loggedIN) {
+    redirect('/sign-in');
+  }
+
   const accounts = await getAccounts({
     userId: loggedIN.$id
   })
@@ -16,14 +22,11 @@ const Home = async ({ searchParams: { id, page }}: SearchParamProps) => {
   if(!accounts) return;
 
   const accountsData = accounts?.data;
+  
+  // URL id determines the active appwriteItemId, falling back to the first account
   const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
 
   const account = await getAccount({ appwriteItemId })
-
-  // 2. Add this protection check before rendering anything
-  if (!loggedIN) {
-    redirect('/sign-in');
-  }
 
   return (
     <section className="home">
@@ -44,16 +47,17 @@ const Home = async ({ searchParams: { id, page }}: SearchParamProps) => {
         </header>
 
         <RecentTransactions 
-        accounts={accountsData}
-        transactions={account?.transactions}
-        appwriteItemId={appwriteItemId}
-        page={currentPage}
+          accounts={accountsData}
+          transactions={account?.transactions}
+          appwriteItemId={appwriteItemId}
+          page={currentPage}
         />
       </div>
 
       <RightSidebar 
         user={loggedIN}
-        transactions={accounts?.transactions}
+        // FIX 2: Passed account?.transactions instead of accounts?.transactions
+        transactions={account?.transactions} 
         banks={accountsData?.slice(0, 2)}
       />
     </section>
