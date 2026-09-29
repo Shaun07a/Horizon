@@ -7,7 +7,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { formatAmount, formatDateTime, getTransactionStatus, removeSpecialCharacters } from "@/lib/utils"
+import { cn, formatAmount, formatDateTime, getTransactionStatus, removeSpecialCharacters } from "@/lib/utils"
+
+const CategoryBadge = ({ category }: CategoryBadgeProps) =>{
+
+    return (
+        <div className={cn('category-badge')}>
+            <div className={cn("size-2 rounded-full")}/>
+                <p className={cn('text-[12px] font-medium')}>
+                    {category}
+                </p>
+            
+        </div>
+    )
+}
 
 const TransactionsTable = ({ transactions }: TransactionTableProps) => {
   return (
