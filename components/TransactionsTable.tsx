@@ -12,7 +12,7 @@ import { formatAmount, formatDateTime, getTransactionStatus, removeSpecialCharac
 const TransactionsTable = ({ transactions }: TransactionTableProps) => {
   return (
     <Table>
-        <TableHeader className="bg=[#f9fafb]">
+        <TableHeader className="bg-[#f9fafb]">
             <TableRow>
             <TableHead className="px-2">Transaction</TableHead>
             <TableHead className="px-2">Amount</TableHead>
@@ -31,16 +31,19 @@ const TransactionsTable = ({ transactions }: TransactionTableProps) => {
             const isCredit = t.type === 'credit';
 
             return (
-                <TableRow key={t.id}>
-                    <TableCell>
-                        <div>
-                            <h1>
+                <TableRow 
+                  key={t.id} 
+                  className={`${isDebit || amount[0] === '-' ? 'bg-[#FFFBFA]' : 'bg-[#F6FEF9]'} border-b hover:bg-transparent`}
+                >
+                    <TableCell className="max-w-[250px] pl-2 pr-10">
+                        <div className="flex item-center gap-3">
+                            <h1 className="text-14 truncate font-semibold text-[#344054]">
                                 {removeSpecialCharacters(t.name)}
                             </h1>
                         </div>
                     </TableCell>
 
-                    <TableCell>
+                    <TableCell >
                         {isDebit ? `-${amount}` : isCredit ? amount : amount}
                     </TableCell>
 
