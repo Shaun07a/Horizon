@@ -43,23 +43,23 @@ const TransactionsTable = ({ transactions }: TransactionTableProps) => {
                         </div>
                     </TableCell>
 
-                    <TableCell >
+                    <TableCell className={`pl-2 pr-10 font-semibold ${isDebit || amount[0] === '-' ? 'text-[#f04438]' : 'text-[#039855]'}`}>
                         {isDebit ? `-${amount}` : isCredit ? amount : amount}
                     </TableCell>
 
-                    <TableCell>
+                    <TableCell className="pl-2 pr-10">
                         {status}
                     </TableCell>
 
-                    <TableCell>
+                    <TableCell className="min-w-32 pl-2 pr-10">
                         {formatDateTime(new Date(t.date)).dateTime}
                     </TableCell>
 
-                    <TableCell>
+                    <TableCell className="pl-2 pr-10 capitalize min-w-24">
                         {t.paymentChannel}
                     </TableCell>
 
-                    <TableCell>
+                    <TableCell className="pl-2 pr-10 max-md:hidden">
                         {t.category}    
                     </TableCell>
                 </TableRow>
