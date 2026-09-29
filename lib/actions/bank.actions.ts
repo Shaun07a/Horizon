@@ -128,7 +128,7 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
     };
 
     // 3. Removed `...transferTransactions` from the merged array since it is commented out above
-    const allTransactions = [...transactions].sort(
+    const allTransactions = [...(transactions || [])].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
