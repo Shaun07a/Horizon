@@ -2,7 +2,11 @@ import React from 'react'
 
 const MyBanks = () => {
   return (
-    <div>MyBanks</div>
+    <section className='flex'> 
+      <div className='my-banks'>
+
+      </div>
+    </section>
   )
 }
 
