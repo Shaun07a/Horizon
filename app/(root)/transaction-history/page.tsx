@@ -3,6 +3,7 @@ import React from 'react'
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
 import { redirect } from 'next/navigation';
+import { formatAmount } from '@/lib/utils';
 
 // 1. Added 'async' and removed inline destructuring of searchParams
 const TransactionHistory = async ({ searchParams }: SearchParamProps) => {
@@ -46,6 +47,14 @@ const TransactionHistory = async ({ searchParams }: SearchParamProps) => {
             <p className='text-14 text-blue-25'>
               {account?.data.officialName}
             </p>
+            <p className='text-14 font-semibold tracking-[1.1px] text-white'>
+                ●●●● ●●●● ●●●● {account?.data.mask}
+            </p>
+          </div>
+
+          <div className='transactions-account-balance'>
+            <p className='text-14'>Current balance</p>
+            <p className='text-24 text-center font-bold'>{formatAmount(account?.data.currentBalance)}</p>
           </div>
         </div>
       </div>
