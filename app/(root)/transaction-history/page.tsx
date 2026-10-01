@@ -4,6 +4,7 @@ import { getAccount, getAccounts } from '@/lib/actions/bank.actions';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
 import { redirect } from 'next/navigation';
 import { formatAmount } from '@/lib/utils';
+import TransactionsTable from '@/components/TransactionsTable';
 
 // 1. Added 'async' and removed inline destructuring of searchParams
 const TransactionHistory = async ({ searchParams }: SearchParamProps) => {
@@ -57,6 +58,12 @@ const TransactionHistory = async ({ searchParams }: SearchParamProps) => {
             <p className='text-24 text-center font-bold'>{formatAmount(account?.data.currentBalance)}</p>
           </div>
         </div>
+
+        <section className='flex w-full flex-col gap-6'>
+          <TransactionsTable 
+          transactions={account?.transactions}
+          />
+        </section>
       </div>
     </section>
   )
