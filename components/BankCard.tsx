@@ -2,6 +2,7 @@ import { formatAmount } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import Copy from './Copy'
 
 const BankCard = ({ account, userName, showBalance = true}: CreditCardProps) => {
   return (
@@ -58,7 +59,7 @@ const BankCard = ({ account, userName, showBalance = true}: CreditCardProps) => 
 
         </Link>
 
-        {/* COPY */}
+        {showBalance && <Copy />}
     </div>
   )
 }
