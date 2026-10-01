@@ -1,3 +1,4 @@
+import BankCard from '@/components/BankCard';
 import HeaderBox from '@/components/HeaderBox'
 import { getAccounts } from '@/lib/actions/bank.actions';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
@@ -8,6 +9,7 @@ const MyBanks = async () => {
   const accounts = await getAccounts({
       userId: loggedIN.$id
     })
+
   return (
     <section className='flex'> 
       <div className='my-banks'>
@@ -21,7 +23,15 @@ const MyBanks = async () => {
             Your cards
           </h2>
           <div className='flex flex-wrap gap-6'>
-
+            {accounts && accounts.data.map((a : Account) => (
+              <BankCard 
+              // FIX 1: Use the individual account ID for the React key
+              key={a.id} 
+              account={a}
+              // FIX 2: Pass the full combined name to match the RightSidebar implementation
+              userName={`${loggedIN?.firstName} ${loggedIN?.lastName}`} 
+              />
+            ))}
           </div>
         </div>
       </div>
