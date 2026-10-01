@@ -114,6 +114,11 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
       accessToken: bank?.accessToken,
     });
 
+    // ADDED FIX: Filter transactions so the Savings account doesn't inherit Checking data
+    const accountTransactions = transactions.filter(
+      (transaction: any) => transaction.accountId === bank.accountId
+    );
+
     const account = {
       id: accountData.account_id,
       availableBalance: accountData.balances.available!,
@@ -127,8 +132,8 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
       appwriteItemId: bank.$id,
     };
 
-    // 3. Removed `...transferTransactions` from the merged array since it is commented out above
-    const allTransactions = [...(transactions || [])].sort(
+    // UPDATED: Spread accountTransactions instead of the raw transactions array
+    const allTransactions = [...(accountTransactions || [])].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 

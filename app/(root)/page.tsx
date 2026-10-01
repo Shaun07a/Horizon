@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import HeaderBox from '@/components/HeaderBox'
 import RecentTransactions from '@/components/RecentTransactions';
 import RightSidebar from '@/components/RightSidebar';
@@ -6,11 +8,14 @@ import { getAccount, getAccounts } from '@/lib/actions/bank.actions';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
 import { redirect } from 'next/navigation'; 
 
-const Home = async ({ searchParams: { id, page }}: SearchParamProps) => {
+// FIX: Remove the inline destructuring of searchParams here
+const Home = async ({ searchParams }: SearchParamProps) => {
+  // FIX: Await the searchParams Promise first, then extract id and page
+  const { id, page } = await searchParams;
+  
   const currentPage = Number(page as string) || 1;
   const loggedIN = await getLoggedInUser();
 
-  // FIX 1: Move redirect BEFORE trying to access loggedIN.$id to prevent server crashes
   if (!loggedIN) {
     redirect('/sign-in');
   }
@@ -22,8 +27,6 @@ const Home = async ({ searchParams: { id, page }}: SearchParamProps) => {
   if(!accounts) return;
 
   const accountsData = accounts?.data;
-  
-  // URL id determines the active appwriteItemId, falling back to the first account
   const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
 
   const account = await getAccount({ appwriteItemId })
