@@ -56,7 +56,7 @@ const RecentTransactions = ({
                     type='full'
                   />
 
-                  <TransactionsTable transactions={transactions}/>
+                  <TransactionsTable transactions={currentTransactions}/>
 
                   <Pagination totalPages={totalPages} page={page}/>
                 </TabsContent>
