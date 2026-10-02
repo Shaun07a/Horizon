@@ -73,14 +73,15 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
       // create transfer transaction
       if (transfer) {
         const transaction = {
-          name: data.name,
-          amount: data.amount,
-          senderId: senderBank.userId.$id,
-          senderBankId: senderBank.$id,
-          receiverId: receiverBank.userId.$id,
-          receiverBankId: receiverBank.$id,
-          email: data.email,
-        };
+            name: data.name,
+            amount: data.amount,
+            // FIX: Add a fallback in case userId is returned as a direct string instead of an object
+            senderId: senderBank.userId?.$id || senderBank.userId,
+            senderBankId: senderBank.$id,
+            receiverId: receiverBank.userId?.$id || receiverBank.userId,
+            receiverBankId: receiverBank.$id,
+            email: data.email,
+            };
 
         const newTransaction = await createTransaction(transaction);
 
