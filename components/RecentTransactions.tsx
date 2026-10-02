@@ -50,6 +50,8 @@ const RecentTransactions = ({
                   />
 
                   <TransactionsTable transactions={transactions}/>
+
+                  
                 </TabsContent>
             ))}
         </Tabs>

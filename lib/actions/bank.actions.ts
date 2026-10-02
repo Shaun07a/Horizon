@@ -12,7 +12,6 @@ import {
 import { plaidClient } from "../plaid";
 import { parseStringify } from "../utils";
 
-// 1. Commented out the transaction actions import
 import { getTransactionsByBankId } from "./transaction.actions";
 import { getBanks, getBank } from "./user.actions";
 
@@ -85,8 +84,6 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
       access_token: bank.accessToken,
     });
     const accountData = accountsResponse.data.accounts[0];
-
-    // 2. Commented out the internal Appwrite transfer database logic
     
     const transferTransactionsData = await getTransactionsByBankId({
        bankId: bank.$id,
@@ -104,7 +101,6 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
       })
     );
     
-
     // get institution info from plaid
     const institution = await getInstitution({
       institutionId: accountsResponse.data.item.institution_id!,
@@ -114,7 +110,7 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
       accessToken: bank?.accessToken,
     });
 
-    // ADDED FIX: Filter transactions so the Savings account doesn't inherit Checking data
+    // Filter transactions so the Savings account doesn't inherit Checking data
     const accountTransactions = transactions.filter(
       (transaction: any) => transaction.accountId === bank.accountId
     );
@@ -132,8 +128,11 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
       appwriteItemId: bank.$id,
     };
 
-    // UPDATED: Spread accountTransactions instead of the raw transactions array
-    const allTransactions = [...(accountTransactions || [])].sort(
+    // FIX: Spread BOTH accountTransactions and transferTransactions into the final array
+    const allTransactions = [
+      ...(accountTransactions || []),
+      ...transferTransactions,
+    ].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
