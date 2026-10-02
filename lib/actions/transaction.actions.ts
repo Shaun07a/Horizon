@@ -1,3 +1,5 @@
+"use server";
+
 import { ID } from "node-appwrite";
 import { createAdminClient } from "../appwrite"
 import { parseStringify } from "../utils";
