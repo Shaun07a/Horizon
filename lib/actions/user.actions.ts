@@ -289,3 +289,24 @@ export const getBank = async ({ documentId }: getBankProps) => {
         console.log("Error fetching bank:", error)
     }
 }
+
+export const getBankByAccountId = async ({ accountId }: getBankByAccountIdProps) => {
+    try {
+        const { database } = await createAdminClient();
+
+        // FIX: Use listDocuments with a Query to search the custom 'accountId' column
+        const bank = await database.listDocuments(
+            DATABASE_ID!,
+            BANK_COLLECTION_ID!,
+            [Query.equal('accountId', [accountId])]
+        )
+
+        // Guard clause in case the account ID doesn't match any banks
+        if(bank.total !== 1) return null;
+
+        // Return the first matching document
+        return parseStringify(bank.documents[0]);
+    } catch (error) {
+        console.log("Error fetching bank by account ID:", error)
+    }
+}
