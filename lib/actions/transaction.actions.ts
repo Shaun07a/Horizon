@@ -4,10 +4,9 @@ import { ID, Query } from "node-appwrite";
 import { createAdminClient } from "../appwrite"
 import { parseStringify } from "../utils";
 
-const {
-    APPWRITE_DATABASE_ID: DATABASE_ID,
-    APPWRITE_TRANSACTION_COLLECTION_ID: TRANSACTION_COLLECTION_ID,
-} = process.env;
+// FIX 1: Access process.env directly to prevent Next.js silent failures
+const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
+const TRANSACTION_COLLECTION_ID = process.env.APPWRITE_TRANSACTION_COLLECTION_ID;
 
 export const createTransaction = async (transaction: CreateTransactionProps) => {
     try {
@@ -48,7 +47,8 @@ export const getTransactionsByBankId = async ({bankId}: getTransactionsByBankIdP
 
        const transactions = {
         total: senderTransactions.total + receiverTransactions.total,
-        documnets: [
+        // FIX 2: Corrected spelling to "documents"
+        documents: [
             ...senderTransactions.documents, 
             ...receiverTransactions.documents,
         ]
