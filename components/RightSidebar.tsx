@@ -54,7 +54,8 @@ const RightSidebar = ({ user, transactions, banks}: RightSidebarProps) => {
                         />
                     </div>
                     {banks[1] && (
-                        <div className='absolute right-0 top-8 z-0 w-[90%]'>
+                        // Changed w-[90%] to w-full and adjusted right positioning so it peeks out evenly
+                        <div className='absolute right-[-20px] top-8 z-0 w-full'>
                             <BankCard 
                                 key={banks[1].$id}
                                 account={banks[1]}
